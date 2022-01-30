@@ -1,0 +1,199 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Zero-in</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&family=Roboto+Mono:wght@300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+
+    <style>
+
+      html, body{
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+        margin: 0;
+        min-height: 180px;
+        padding: 0;
+        width: 384px;
+      }
+
+      h1{
+        font-family: 'Roboto Mono', monospace;
+        font-size: 22px;
+        font-weight: 400px;
+        margin: 0;
+        color: #1BBC9B;
+      }
+
+      a:link, a:visited{
+        color: #000;
+        outlie: 0;
+        text-decoraction: none;
+      }
+
+      img{
+        width: 48px;
+      }
+
+      .modal-header {
+        align-items: center;
+        border-bottom: 1.5px solid #1BBC9B;
+      }
+
+      .modal-content{
+        padding: 0 22px;
+      }
+
+      .modal-icons{
+        border-top: 1.5px solid #1BBC9B;
+        height: 50px;
+        width: 100%;
+      }
+
+      .logo{
+        padding: 16px;
+      }
+
+      .logo-icon{
+        vertical-align: text-bottom;
+        margin-right: 12px;
+      }
+
+      .version{
+        color: #000;
+        font-size: 18px;
+      }
+
+      .flex-container{
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 22px;
+      }
+
+      .flex{
+        opacity: 1;
+        transition: opacity 0.2s ease-in-out;
+        width; 120px;
+      }
+
+      .flex:hover{
+        opacity: 0.4;
+      }
+
+      .flex .fab{
+        font-size: 40px;
+        color: #e09320;
+      }
+
+      .button-container{
+        padding-top: 11px;
+      }
+
+      .button{
+        display: inline-flex;
+        background-color: #e09320;
+        border: none;
+        outline: none;
+        height: 50px;
+        border-radius: 5px;
+        overflow: hidden;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .button:hover{
+        background-color: #c58321;
+      }
+
+      .button:active{
+        background-color: #b0741a;
+      }
+
+      .button__text, .button__icon{
+        display: inline-flex;
+        align-items: center;
+        padding: 0 12px;
+        height: 100%;
+      }
+
+      .button__icon{
+        font-size: 1.5em;
+      }
+
+      .box{
+        height: 20px;
+        width: 20px;
+        background: blue;
+      }
+
+    </style>
+  </head>
+  <body style="background-color:#325f68">
+
+    <div class="modal-header">
+      <h1 class="logo">
+        <img src="content/zero-in48.png" alt="Zero-in" class="logo-icon"> Zero-In <span class="version">(1.0.0)</span>
+      </h1>
+    </div>
+
+    <div class="modal-content">
+
+      <div class="button-container">
+        <button name="PM_button" type="button" class="button" id="PM_button">
+          <span class="button__text">Productivity Mode</span>
+          <span class="button__icon">
+            <i class="fas fa-crosshairs"></i>
+          </span>
+        </button>
+      </div>
+
+      <!-- <div class="button-container">
+        <button onclick="blockBtn()" name="PM_button" type="button" class="button">
+          <span class="button__text">Block Website</span>
+          <span class="button__icon">
+            <i class="fas fa-lock"></i>
+          </span>
+        </button>
+      </div> -->
+
+      <div class="button-container">
+        <div id="square" class="box">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-icons">
+      <div class="flex-container">
+        <div class="flex">
+          <a href="https://github.com/Voyatz" target="_blank">
+            <i class="fab fa-github"></i><p>Vasilios V.</p>
+          </a>
+        </div>
+        <div class="flex">
+          <a href="https://github.com/SireFish" target="_blank">
+            <i class="fab fa-github"></i><p>Adrian N.</p>
+          </a>
+        </div>
+        <div class="flex">
+          <a href="https://github.com/xFebreze" target="_blank">
+            <i class="fab fa-github"></i><p>Alek D.</p>
+          </a>
+        </div>
+        <div class="flex">
+          <a href="https://www.youtube.com/watch?v=jjf-QPUzB94" target="_blank">
+            <i class="fas fa-ellipsis-v"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="buttonpress.js"></script>
+  </body>
+</html>

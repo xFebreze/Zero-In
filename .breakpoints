@@ -1,3 +1,28 @@
 {
-  "files": {}
+  "files": {
+    "Extension/absolutewrite.py": [
+      {
+        "id": "f2adf417-7b12-459b-99f4-c618e0291a18",
+        "line": 9,
+        "version": 189,
+        "index": 265
+      }
+    ],
+    "Extension/manifest.json": [
+      {
+        "id": "f179db0c-e309-461f-8676-13e4b1777d00",
+        "line": 21,
+        "version": 948,
+        "index": 599
+      }
+    ],
+    "Extension/test.js": [
+      {
+        "id": "937822ea-0e68-4dd5-b3cc-b004621360c9",
+        "line": 45,
+        "version": 660,
+        "index": 1268
+      }
+    ]
+  }
 }
