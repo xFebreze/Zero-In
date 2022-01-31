@@ -9,6 +9,17 @@ function format(uncutUrl){
 }
 
 var button = document.getElementById('PM_button');
+
+window.onload = function() {
+  chrome.storage.sync.get('productivityOn',(value)=>{
+
+    if (value.productivityOn == false){
+      button.style.backgroundColor = '#b0741a';
+    }
+
+  })
+}
+
 button.onclick = () => {
   chrome.storage.sync.get('productivityOn',(value)=>{
 
@@ -74,7 +85,6 @@ button3.onclick = () => {
       }
 
       chrome.storage.sync.set({'blacklist': newList},()=>{
-
       })
     })
   })
