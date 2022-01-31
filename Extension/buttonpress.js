@@ -8,29 +8,29 @@ function format(uncutUrl){
 
 }
 
-var button = document.getElementById('PM_button');
+var PM_button = document.getElementById('PM_button');
 
 window.onload = function() {
   chrome.storage.sync.get('productivityOn',(value)=>{
 
     if (value.productivityOn == false){
-      button.style.backgroundColor = '#b0741a';
+      PM_button.style.backgroundColor = '#b0741a';
     }
 
   })
 }
 
-button.onclick = () => {
+PM_button.onclick = () => {
   chrome.storage.sync.get('productivityOn',(value)=>{
 
       var swap = ! value.productivityOn;
 
       if (swap == true){
-        button.style.backgroundColor = '#e09320';
+        PM_button.style.backgroundColor = '#e09320';
         console.log("Zero-In: Productivity Mode turned on!");
       }
       else{
-        button.style.backgroundColor = '#b0741a';
+        PM_button.style.backgroundColor = '#b0741a';
         console.log("Zero-In: Productivity Mode turned off!");
       }
 
@@ -41,8 +41,8 @@ button.onclick = () => {
   })
 }
 
-var button2 = document.getElementById('BW_button');
-button2.onclick = () => {
+var BW_button = document.getElementById('BW_button');
+BW_button.onclick = () => {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     var url = tabs[0].url
     url = format(url);
@@ -66,8 +66,8 @@ button2.onclick = () => {
   })
 }
 
-var button3 = document.getElementById('UB_button');
-button3.onclick = () => {
+var UB_button = document.getElementById('UB_button');
+UB_button.onclick = () => {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     var url = tabs[0].url
     url = format(url);
