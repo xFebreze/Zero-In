@@ -38,19 +38,19 @@ popUp = `<html>
 
 
 function format(uncutUrl){
-  
+
   var posMid = (uncutUrl.indexOf('.'));
   var posEnd = (uncutUrl.slice(posMid)).indexOf('/') + posMid
   uncutUrl = uncutUrl.slice(0,posEnd) + "/*";
   return uncutUrl;
-  
+
 }
 
-let siteList = []; 
+let siteList = [];
 chrome.storage.sync.get("blacklist", function(val) {
 
     siteList = val["blacklist"];
-    
+
 });
 
 var url = document.URL
@@ -62,10 +62,11 @@ chrome.storage.sync.get('productivityOn',(value)=>{
 
     if ( (value.productivityOn == true) && (index > -1)) {
 
+      console.log("Zero-In: User tried to access " + url + ". Blocking website...");
+
       document.open()
       document.write(popUp)
       document.close()
-      
+
     }
 })
-
