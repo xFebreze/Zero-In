@@ -9,12 +9,14 @@ function format(uncutUrl){
 }
 
 var PM_button = document.getElementById('PM_button');
+var crosshair = document.getElementById('crosshair');
 
 window.onload = function() {
   chrome.storage.sync.get('productivityOn',(value)=>{
 
     if (value.productivityOn == false){
       PM_button.style.backgroundColor = '#b0741a';
+        crosshair.style.opacity = '0.5';
     }
 
   })
@@ -27,10 +29,12 @@ PM_button.onclick = () => {
 
       if (swap == true){
         PM_button.style.backgroundColor = '#e09320';
+        crosshair.style.opacity = '1.0';
         console.log("Zero-In: Productivity Mode turned on!");
       }
       else{
         PM_button.style.backgroundColor = '#b0741a';
+        crosshair.style.opacity = '0.5';
         console.log("Zero-In: Productivity Mode turned off!");
       }
 

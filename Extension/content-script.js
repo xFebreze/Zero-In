@@ -28,7 +28,7 @@ popUp = `<html>
         </style>
         <body style="background-image: linear-gradient(to bottom right, #B9EFA3, #008693)">
           <h1>Nonono...</h1>
-            <img src="https://cdn.discordapp.com/attachments/929849977423929407/937161808530260019/nocat.png" al></img>
+            <img src="https://cdn.discordapp.com/attachments/929849977423929407/937767116759789568/nocat4.png" al></img>
           <p>get back to work!</p>
             <marquee behavior="slide"scrollamount="40"><img src="https://cdn.discordapp.com/attachments/929849977423929407/937161808316366868/no-cat.gif"class="center"></img></marquee>
         </body>
