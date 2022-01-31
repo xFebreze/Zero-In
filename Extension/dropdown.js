@@ -93,3 +93,34 @@ UB_button.onclick = () => {
     })
   })
 }
+
+var check = new Date();
+check.setTime(check.getTime());
+check = 5000 + check.getTime()
+//console.log("3");
+workInterval = true;
+
+var countWork = setInterval(function(){
+  var now = new Date().getTime();
+  //console.log("4");
+  var timeRemaining = check - now;
+  //console.log(timeRemaining);
+  var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+  console.log(minutes + ":" + seconds);
+
+  if (timeRemaining < 0){
+    clearInterval(countWork);
+    if (workInterval == true){
+      workInterval = false;
+      alert("Time is up! Take a break, wash your face, grab some water and a snack!");
+    }
+    else{
+      workInterval = true;
+      alert("Time is up! Let's focus hard and be productive!");
+    }
+    cycles++;
+    counting = false;
+  }
+  document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+}, 1000)
