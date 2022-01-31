@@ -1,11 +1,11 @@
 function format(uncutUrl){
-  
+
   var posMid = (uncutUrl.indexOf('.'));
   var posEnd = (uncutUrl.slice(posMid)).indexOf('/') + posMid
   uncutUrl = uncutUrl.slice(0,posEnd) + "/*";
-  
+
   return uncutUrl;
-  
+
 }
 
 var button = document.getElementById('PM_button');
@@ -16,14 +16,16 @@ button.onclick = () => {
 
       if (swap == true){
         button.style.backgroundColor = '#e09320';
+        console.log("Zero-In: Productivity Mode turned on!");
       }
       else{
         button.style.backgroundColor = '#b0741a';
+        console.log("Zero-In: Productivity Mode turned off!");
       }
-      
+
 
       chrome.storage.sync.set({'productivityOn': swap},()=>{
-        
+
       })
   })
 }
@@ -40,6 +42,10 @@ button2.onclick = () => {
       var index = newList.indexOf(url);
       if (index == -1) {
         newList.push(url);
+        console.log("Zero-In: " + url + " added to blacklist!")
+      }
+      else{
+        console.log("Zero-In [ERROR]: " + url + " is already on the blacklist! It cannot be added again.");
       }
 
       chrome.storage.sync.set({'blacklist': newList},()=>{
@@ -61,10 +67,14 @@ button3.onclick = () => {
       var index = newList.indexOf(url);
       if (index > -1) {
         newList.splice(index, 1);
+        console.log("Zero-In: " + url + " removed from the blacklist!");
+      }
+      else{
+        console.log("Zero-In [ERROR]: " + url + " is not on the blacklist! It cannot be removed.");
       }
 
       chrome.storage.sync.set({'blacklist': newList},()=>{
-  
+
       })
     })
   })
