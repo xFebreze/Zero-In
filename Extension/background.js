@@ -9,7 +9,12 @@ chrome.runtime.onInstalled.addListener(() => {
         "https://www.pinterest.com/*",
         "https://www.tumblr.com/*",
         "https://www.twitch.tv/*",
-        "https://www.youtube.com/*"];
+        "https://www.youtube.com/*",
+        "https://www.disneyplus.com/*",
+        "https://www.netflix.com/*",
+        "https://www.hulu.com/*",
+        "https://www.hbomax.com/*",
+        "https://www.paramountplus.com/*"];
 
       chrome.storage.sync.set({'blacklist': init_list},()=>{
         console.log("Zero-In: Blacklist initialized!");
