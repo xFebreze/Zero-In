@@ -24,6 +24,10 @@ chrome.runtime.onInstalled.addListener(() => {
         console.log("Zero-In: Productivy Mode setting initialized!");
       })
 
+      chrome.storage.sync.set({'alarm': "none"},()=>{
+        console.log("Zero-In: Alarm status initialized!");
+      })
+
 });
 
 chrome.alarms.onAlarm.addListener(function(alarm){
@@ -34,6 +38,9 @@ chrome.alarms.onAlarm.addListener(function(alarm){
       iconUrl: 'content/zero-in128.png',
       type: "basic"
     });
+    chrome.storage.sync.set({'alarm': "breakAlarm"},()=>{})
+    chrome.alarms.create("breakAlarm",{delayInMinutes : 5})
+
   }
   else if(alarm.name == "breakAlarm"){
     chrome.notifications.create({
@@ -42,5 +49,8 @@ chrome.alarms.onAlarm.addListener(function(alarm){
       iconUrl: 'content/zero-in128.png',
       type: "basic"
     });
+    chrome.storage.sync.set({'alarm': "workAlarm"},()=>{})
+    chrome.alarms.create("workAlarm",{delayInMinutes : 25})
+
   }
 });

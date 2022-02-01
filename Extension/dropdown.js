@@ -94,55 +94,54 @@ UB_button.onclick = () => {
   })
 }
 
-function countDown(workInterval){
-  var check = new Date();
-  check.setTime(check.getTime());
-  if (workInterval == true){
-    check = 60000 + check.getTime()
-    chrome.alarms.create("workAlarm",{delayInMinutes : 1})
-  }
-  else{
-    check = 60000 + check.getTime()
-    chrome.alarms.create("breakAlarm",{delayInMinutes : 1})
-  }
-  var countWork = setInterval(function(){
-    var now = new Date().getTime();
-    var timeRemaining = check - now;
-    var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-    console.log(minutes + ":" + seconds);
-
-    if (timeRemaining < 0){
-      clearInterval(countWork);
-      if (workInterval == true){
-        /*chrome.notifications.create({
-          title: 'Zero-In',
-          message: 'Time is up! Take a break, wash your face, grab some water and a snack!',
-          iconUrl: 'content/zero-in128.png',
-          type: "basic"
-        });*/
-        //alert("Time is up! Take a break, wash your face, grab some water and a snack!");
-        countDown(false);
+function updateTimer(){
+  chrome.storage.sync.get('alarm',(value)=>{
+    console.log(value.alarm);
+      if (value.alarm !== "none"){
+        chrome.alarms.get(value.alarm, function(activeAlarm) {
+          var endTime = activeAlarm.scheduledTime;
+          var count = setInterval(function(){
+            var nowTime = new Date().getTime();
+            var remainingTime = endTime - nowTime;
+            var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+            if (remainingTime < 0){
+              clearInterval(count);
+              setTimeout(function(){
+                updateTimer();
+              }, 200);
+            }
+            else{
+              if ((minutes < 10) && (seconds < 10)){
+                document.getElementById("timer").innerHTML = "0" + minutes + ":0" + seconds;
+              }
+              else if (minutes < 10){
+                document.getElementById("timer").innerHTML = "0" + minutes + ":" + seconds;
+              }
+              else if (seconds < 10){
+                  document.getElementById("timer").innerHTML = minutes + ":0" + seconds;
+              }
+              else{
+                  document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+              }
+            }
+          }, 300)
+        })
       }
-      else{
-        /*chrome.notifications.create({
-          title: 'Zero-In',
-          message: 'Time is up! Let\'s focus hard and be productive!',
-          iconUrl: 'content/zero-in128.png',
-          type: "basic"
-        });*/
-        //alert("Time is up! Let's focus hard and be productive!");
-        countDown(true);
-      }
-
-    }
-    else{
-    document.getElementById("timer").innerHTML = minutes + ":" + seconds;
-    }
-  }, 300)
+  })
 }
+
+
 
 var timer_button = document.getElementById('timer_button');
 timer_button.onclick = () => {
-  countDown(true);
+  chrome.storage.sync.get('alarm',(value)=>{
+    activeAlarm = chrome.alarms.get(value.alarm);
+    if (value.alarm == "none"){
+      chrome.alarms.create("workAlarm",{delayInMinutes : 25});
+      chrome.storage.sync.set({'alarm': "workAlarm"},()=>{})
+    }
+    updateTimer();
+  })
 }
+updateTimer();
