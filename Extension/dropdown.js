@@ -94,6 +94,7 @@ UB_button.onclick = () => {
   })
 }
 
+var clear = false;
 function updateTimer(){
   chrome.storage.sync.get('alarm',(value)=>{
     console.log(value.alarm);
@@ -105,7 +106,8 @@ function updateTimer(){
             var remainingTime = endTime - nowTime;
             var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-            if (remainingTime < 0){
+            if ((remainingTime < 0)||(clear==true)){
+              clear = false;
               clearInterval(count);
               setTimeout(function(){
                 updateTimer();
@@ -145,3 +147,11 @@ timer_button.onclick = () => {
   })
 }
 updateTimer();
+
+var clear_button = document.getElementById('clear_button');
+clear_button.onclick = () => {
+  clear = true;
+  document.getElementById("timer").innerHTML = '';
+  chrome.alarms.clearAll();
+  chrome.storage.sync.set({'alarm': "none"},()=>{})
+}
