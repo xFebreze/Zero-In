@@ -155,11 +155,3 @@ timer_button.onclick = () => {
   })
 }
 updateTimer();
-
-var clear_button = document.getElementById('clear_button');
-clear_button.onclick = () => {
-  clear = true;
-  document.getElementById("timer").innerHTML = '';
-  chrome.alarms.clearAll();
-  chrome.storage.sync.set({'alarm': "none"},()=>{})
-}
