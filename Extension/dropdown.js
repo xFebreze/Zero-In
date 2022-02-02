@@ -142,6 +142,14 @@ timer_button.onclick = () => {
     if (value.alarm == "none"){
       chrome.alarms.create("workAlarm",{delayInMinutes : 25});
       chrome.storage.sync.set({'alarm': "workAlarm"},()=>{})
+      timer_button.innerHTML = 'Stop Timer';
+    }
+    else{
+      clear = true;
+      document.getElementById("timer").innerHTML = '';
+      chrome.alarms.clearAll();
+      chrome.storage.sync.set({'alarm': "none"},()=>{})
+      timer_button.innerHTML = 'Start Timer';
     }
     updateTimer();
   })
