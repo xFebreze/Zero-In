@@ -58,9 +58,12 @@ BW_button.onclick = () => {
       if (index == -1) {
         newList.push(url);
         console.log("Zero-In: " + url + " added to blacklist!")
+        BW_button.innerHTML = 'Unblock Website';
       }
       else{
-        console.log("Zero-In [ERROR]: " + url + " is already on the blacklist! It cannot be added again.");
+        newList.splice(index, 1);
+        console.log("Zero-In: " + url + " removed from the blacklist!");
+        BW_button.innerHTML = 'Block Website';
       }
 
       chrome.storage.sync.set({'blacklist': newList},()=>{
@@ -70,29 +73,23 @@ BW_button.onclick = () => {
   })
 }
 
-var UB_button = document.getElementById('UB_button');
-UB_button.onclick = () => {
+function updateBlock(){
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     var url = tabs[0].url
     url = format(url);
 
     chrome.storage.sync.get('blacklist',(value)=>{
-      newList = value.blacklist;
-
-      var index = newList.indexOf(url);
+      var index = value.blacklist.indexOf(url);
       if (index > -1) {
-        newList.splice(index, 1);
-        console.log("Zero-In: " + url + " removed from the blacklist!");
-      }
-      else{
-        console.log("Zero-In [ERROR]: " + url + " is not on the blacklist! It cannot be removed.");
+        BW_button.innerHTML = 'Unblock Website';
       }
 
-      chrome.storage.sync.set({'blacklist': newList},()=>{
-      })
     })
   })
 }
+
+updateBlock();
+
 
 var clear = false;
 function updateTimer(){
