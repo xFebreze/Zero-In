@@ -3,6 +3,7 @@
   "description": "Zero-in is a chrome based extension that uses website data to track your effeciency and hone in on your work",
   "version": "1.0",
   "manifest_version": 3,
+  "options_page": "options.html",
   "background": {
     "service_worker": "background.js"
   },
