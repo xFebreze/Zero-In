@@ -1,3 +1,41 @@
+popUp = `<html>
+    <head>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&family=Roboto+Mono:wght@300;700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+        <style>
+
+            body{
+              text-align: center;
+              font-family: 'Open Sans', sans-serif;
+              color: white;
+            }
+
+            h1{
+              font-family: 'Roboto Mono', monospace;
+              font-size: 60px;
+            }
+
+            .center{
+                length: 500;
+                width: 500;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+        </style>
+        <body style="background-image: linear-gradient(to bottom right, #B9EFA3, #008693)">
+          <h1>Nonono...</h1>
+            <img src="https://cdn.discordapp.com/attachments/929849977423929407/937767116759789568/nocat4.png" al></img>
+          <p>get back to work!</p>
+            <marquee behavior="slide"scrollamount="40"><img src="https://cdn.discordapp.com/attachments/929849977423929407/937161808316366868/no-cat.gif"class="center"></img></marquee>
+        </body>
+    </head>
+</html>
+`
+
 function format(uncutUrl){
 
   var posMid = (uncutUrl.indexOf('.'));
@@ -58,9 +96,18 @@ BW_button.onclick = () => {
       if (index == -1) {
         newList.push(url);
         console.log("Zero-In: " + url + " added to blacklist!")
+        BW_button.innerHTML = 'Unblock Website';
+        chrome.tabs.reload(tabs[0].id);
       }
       else{
-        console.log("Zero-In [ERROR]: " + url + " is already on the blacklist! It cannot be added again.");
+        newList.splice(index, 1);
+        console.log("Zero-In: " + url + " removed from the blacklist!");
+        BW_button.innerHTML = 'Block Website';
+        chrome.storage.sync.get('productivityOn',(value)=>{
+          if (value.productivityOn == true){
+            chrome.tabs.reload(tabs[0].id);
+          }
+        })
       }
 
       chrome.storage.sync.set({'blacklist': newList},()=>{
@@ -70,26 +117,82 @@ BW_button.onclick = () => {
   })
 }
 
-var UB_button = document.getElementById('UB_button');
-UB_button.onclick = () => {
+function updateBlock(){
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     var url = tabs[0].url
     url = format(url);
 
     chrome.storage.sync.get('blacklist',(value)=>{
-      newList = value.blacklist;
-
-      var index = newList.indexOf(url);
+      var index = value.blacklist.indexOf(url);
       if (index > -1) {
-        newList.splice(index, 1);
-        console.log("Zero-In: " + url + " removed from the blacklist!");
-      }
-      else{
-        console.log("Zero-In [ERROR]: " + url + " is not on the blacklist! It cannot be removed.");
+        BW_button.innerHTML = 'Unblock Website';
       }
 
-      chrome.storage.sync.set({'blacklist': newList},()=>{
-      })
     })
   })
 }
+
+updateBlock();
+
+
+var clear = false;
+function updateTimer(){
+  chrome.storage.sync.get('alarm',(value)=>{
+    console.log(value.alarm);
+      if (value.alarm !== "none"){
+        chrome.alarms.get(value.alarm, function(activeAlarm) {
+          var endTime = activeAlarm.scheduledTime;
+          var count = setInterval(function(){
+            var nowTime = new Date().getTime();
+            var remainingTime = endTime - nowTime;
+            var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+            if ((remainingTime < 0)||(clear==true)){
+              clear = false;
+              clearInterval(count);
+              setTimeout(function(){
+                updateTimer();
+              }, 200);
+            }
+            else{
+              if ((minutes < 10) && (seconds < 10)){
+                document.getElementById("timer").innerHTML = "0" + minutes + ":0" + seconds;
+              }
+              else if (minutes < 10){
+                document.getElementById("timer").innerHTML = "0" + minutes + ":" + seconds;
+              }
+              else if (seconds < 10){
+                  document.getElementById("timer").innerHTML = minutes + ":0" + seconds;
+              }
+              else{
+                  document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+              }
+            }
+          }, 300)
+        })
+      }
+  })
+}
+
+
+
+var timer_button = document.getElementById('timer_button');
+timer_button.onclick = () => {
+  chrome.storage.sync.get('alarm',(value)=>{
+    activeAlarm = chrome.alarms.get(value.alarm);
+    if (value.alarm == "none"){
+      chrome.alarms.create("workAlarm",{delayInMinutes : 25});
+      chrome.storage.sync.set({'alarm': "workAlarm"},()=>{})
+      timer_button.innerHTML = 'Stop Timer';
+    }
+    else{
+      clear = true;
+      document.getElementById("timer").innerHTML = '';
+      chrome.alarms.clearAll();
+      chrome.storage.sync.set({'alarm': "none"},()=>{})
+      timer_button.innerHTML = 'Start Timer';
+    }
+    updateTimer();
+  })
+}
+updateTimer();
