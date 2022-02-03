@@ -158,39 +158,39 @@ updateBlock();
 var clear = false;
 function updateTimer(){
   chrome.storage.sync.get('alarm',(value)=>{
-    console.log(value.alarm);
-      if (value.alarm !== "none"){
-        chrome.alarms.get(value.alarm, function(activeAlarm) {
-          var endTime = activeAlarm.scheduledTime;
-          var count = setInterval(function(){
-            var nowTime = new Date().getTime();
-            var remainingTime = endTime - nowTime;
-            var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-            if ((remainingTime < 0)||(clear==true)){
-              clear = false;
-              clearInterval(count);
-              setTimeout(function(){
-                updateTimer();
-              }, 200);
+    if (value.alarm !== "none"){
+    timer_button.innerHTML = stopHTML;
+      chrome.alarms.get(value.alarm, function(activeAlarm) {
+        var endTime = activeAlarm.scheduledTime;
+        var count = setInterval(function(){
+          var nowTime = new Date().getTime();
+          var remainingTime = endTime - nowTime;
+          var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+          if ((remainingTime < 0)||(clear==true)){
+            clear = false;
+            clearInterval(count);
+            setTimeout(function(){
+              updateTimer();
+            }, 200);
+          }
+          else{
+            if ((minutes < 10) && (seconds < 10)){
+              document.getElementById("timer").innerHTML = "0" + minutes + ":0" + seconds;
+            }
+            else if (minutes < 10){
+              document.getElementById("timer").innerHTML = "0" + minutes + ":" + seconds;
+            }
+            else if (seconds < 10){
+                document.getElementById("timer").innerHTML = minutes + ":0" + seconds;
             }
             else{
-              if ((minutes < 10) && (seconds < 10)){
-                document.getElementById("timer").innerHTML = "0" + minutes + ":0" + seconds;
-              }
-              else if (minutes < 10){
-                document.getElementById("timer").innerHTML = "0" + minutes + ":" + seconds;
-              }
-              else if (seconds < 10){
-                  document.getElementById("timer").innerHTML = minutes + ":0" + seconds;
-              }
-              else{
-                  document.getElementById("timer").innerHTML = minutes + ":" + seconds;
-              }
+                document.getElementById("timer").innerHTML = minutes + ":" + seconds;
             }
-          }, 300)
-        })
-      }
+          }
+        }, 300)
+      })
+    }
   })
 }
 
