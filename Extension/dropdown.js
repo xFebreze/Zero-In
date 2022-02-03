@@ -36,6 +36,26 @@ popUp = `<html>
 </html>
 `
 
+unblockHTML = `<span class="button__text">Unblock Website</span>
+<span class="button__icon">
+  <i class="fas fa-unlock"></i>
+</span>`
+
+blockHTML = `<span class="button__text">Block Website</span>
+<span class="button__icon">
+  <i class="fas fa-lock"></i>
+</span>`
+
+startHTML = `<span class="button__text">Start Timer</span>
+<span class="button__icon">
+  <i class="fas fa-clock"></i>
+</span>`
+
+stopHTML = `<span class="button__text">Stop Timer</span>
+<span class="button__icon">
+  <i class="fas fa-clock"></i>
+</span>`
+
 function format(uncutUrl){
 
   var posMid = (uncutUrl.indexOf('.'));
@@ -96,13 +116,13 @@ BW_button.onclick = () => {
       if (index == -1) {
         newList.push(url);
         console.log("Zero-In: " + url + " added to blacklist!")
-        BW_button.innerHTML = 'Unblock Website';
+        BW_button.innerHTML = unblockHTML;
         chrome.tabs.reload(tabs[0].id);
       }
       else{
         newList.splice(index, 1);
         console.log("Zero-In: " + url + " removed from the blacklist!");
-        BW_button.innerHTML = 'Block Website';
+        BW_button.innerHTML = blockHTML;
         chrome.storage.sync.get('productivityOn',(value)=>{
           if (value.productivityOn == true){
             chrome.tabs.reload(tabs[0].id);
@@ -125,7 +145,7 @@ function updateBlock(){
     chrome.storage.sync.get('blacklist',(value)=>{
       var index = value.blacklist.indexOf(url);
       if (index > -1) {
-        BW_button.innerHTML = 'Unblock Website';
+        BW_button.innerHTML = unblockHTML;
       }
 
     })
@@ -183,14 +203,14 @@ timer_button.onclick = () => {
     if (value.alarm == "none"){
       chrome.alarms.create("workAlarm",{delayInMinutes : 25});
       chrome.storage.sync.set({'alarm': "workAlarm"},()=>{})
-      timer_button.innerHTML = 'Stop Timer';
+      timer_button.innerHTML = stopHTML;
     }
     else{
       clear = true;
       document.getElementById("timer").innerHTML = '';
       chrome.alarms.clearAll();
       chrome.storage.sync.set({'alarm': "none"},()=>{})
-      timer_button.innerHTML = 'Start Timer';
+      timer_button.innerHTML = startHTML;
     }
     updateTimer();
   })
