@@ -1,3 +1,4 @@
+// BLOCK HTML DATA TO INJECT
 popUp = `<html>
     <head>
       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +37,7 @@ popUp = `<html>
 </html>
 `
 
+// FORMAT URL CONVENTION TO MAKE URL MATCHING SIMPLER
 function format(uncutUrl){
 
   var posMid = (uncutUrl.indexOf('.'));
@@ -46,77 +48,7 @@ function format(uncutUrl){
 
 }
 
-var PM_button = document.getElementById('PM_button');
-var crosshair = document.getElementById('crosshair');
-
-window.onload = function() {
-  chrome.storage.sync.get('productivityOn',(value)=>{
-
-    if (value.productivityOn == false){
-      PM_button.style.backgroundColor = '#b0741a';
-        crosshair.style.opacity = '0.5';
-    }
-
-  })
-}
-
-PM_button.onclick = () => {
-  chrome.storage.sync.get('productivityOn',(value)=>{
-
-      var swap = ! value.productivityOn;
-
-      if (swap == true){
-        PM_button.style.backgroundColor = '#e09320';
-        crosshair.style.opacity = '1.0';
-        console.log("Zero-In: Productivity Mode turned on!");
-      }
-      else{
-        PM_button.style.backgroundColor = '#b0741a';
-        crosshair.style.opacity = '0.5';
-        console.log("Zero-In: Productivity Mode turned off!");
-      }
-
-
-      chrome.storage.sync.set({'productivityOn': swap},()=>{
-
-      })
-  })
-}
-
-var BW_button = document.getElementById('BW_button');
-BW_button.onclick = () => {
-  chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-    var url = tabs[0].url
-    url = format(url);
-
-    chrome.storage.sync.get('blacklist',(value)=>{
-      newList = value.blacklist;
-
-      var index = newList.indexOf(url);
-      if (index == -1) {
-        newList.push(url);
-        console.log("Zero-In: " + url + " added to blacklist!")
-        BW_button.innerHTML = 'Unblock Website';
-        chrome.tabs.reload(tabs[0].id);
-      }
-      else{
-        newList.splice(index, 1);
-        console.log("Zero-In: " + url + " removed from the blacklist!");
-        BW_button.innerHTML = 'Block Website';
-        chrome.storage.sync.get('productivityOn',(value)=>{
-          if (value.productivityOn == true){
-            chrome.tabs.reload(tabs[0].id);
-          }
-        })
-      }
-
-      chrome.storage.sync.set({'blacklist': newList},()=>{
-
-      })
-     })
-  })
-}
-
+// UPDATE THE BLOCK/UNBLOCK BUTTON BASED ON IF THE CURRENT WEBSITE IS UNBLOCKED OR BLOCKED
 function updateBlock(){
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     var url = tabs[0].url
@@ -132,9 +64,8 @@ function updateBlock(){
   })
 }
 
-updateBlock();
-
-
+//UPDATE THE VISUAL COUNTDOWN TIMER, BASED ON THE CHROME.ALARM SET AND RECURSING IN BACKGROUND.JS
+//ESP. WHEN FIRST OPENING THE DROPDOWN
 var clear = false;
 function updateTimer(){
   chrome.storage.sync.get('alarm',(value)=>{
@@ -174,8 +105,85 @@ function updateTimer(){
   })
 }
 
+var PM_button = document.getElementById('PM_button');
+var crosshair = document.getElementById('crosshair');
+
+// WHEN DROPDOWN OPENS, UPDATE PRODUCTIVITY MODE BUTTON COLOR BASED ON IF IT IS ON OR OFF
+window.onload = function() {
+  chrome.storage.sync.get('productivityOn',(value)=>{
+
+    if (value.productivityOn == false){
+      PM_button.style.backgroundColor = '#b0741a';
+        crosshair.style.opacity = '0.5';
+    }
+
+  })
+}
 
 
+// PRODUCITIVITY MODE BUTTON - TURN ON/OFF SOCIAL MEDIA BLOCKING MODE
+// CURRENT MODE STORED IN CHROME.STORAGE VARIABLE "productivityOn"
+PM_button.onclick = () => {
+  chrome.storage.sync.get('productivityOn',(value)=>{
+
+      var swap = ! value.productivityOn;
+
+      if (swap == true){
+        PM_button.style.backgroundColor = '#e09320';
+        crosshair.style.opacity = '1.0';
+        console.log("Zero-In: Productivity Mode turned on!");
+      }
+      else{
+        PM_button.style.backgroundColor = '#b0741a';
+        crosshair.style.opacity = '0.5';
+        console.log("Zero-In: Productivity Mode turned off!");
+      }
+
+
+      chrome.storage.sync.set({'productivityOn': swap},()=>{
+
+      })
+  })
+}
+
+// BLOCK BUTTON - ADD OR REMOVE CURRENT WEBSITE TO/FROM BLOCKED LIST
+// BLOCKED LIST STORED IN CHROME.STORAGE VARIABLE ('blacklist')
+var BW_button = document.getElementById('BW_button');
+BW_button.onclick = () => {
+  chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+    var url = tabs[0].url
+    url = format(url);
+
+    chrome.storage.sync.get('blacklist',(value)=>{
+      newList = value.blacklist;
+
+      var index = newList.indexOf(url);
+      if (index == -1) {
+        newList.push(url);
+        console.log("Zero-In: " + url + " added to blacklist!")
+        BW_button.innerHTML = 'Unblock Website';
+        chrome.tabs.reload(tabs[0].id);
+      }
+      else{
+        newList.splice(index, 1);
+        console.log("Zero-In: " + url + " removed from the blacklist!");
+        BW_button.innerHTML = 'Block Website';
+        chrome.storage.sync.get('productivityOn',(value)=>{
+          if (value.productivityOn == true){
+            chrome.tabs.reload(tabs[0].id);
+          }
+        })
+      }
+
+      chrome.storage.sync.set({'blacklist': newList},()=>{
+
+      })
+     })
+  })
+}
+
+// TIMER BUTTON - CREATES OR CLEARS CHROME.ALARM FOR POMODORO TIMER
+// REST OF TIMER CYCLE HANDLED IN BACKGROUND.JS
 var timer_button = document.getElementById('timer_button');
 timer_button.onclick = () => {
   chrome.storage.sync.get('alarm',(value)=>{
@@ -195,4 +203,7 @@ timer_button.onclick = () => {
     updateTimer();
   })
 }
+
+// CALLS TO UPDATE INTERFACE WHEN OPENING DROPDOWN
+updateBlock();
 updateTimer();
